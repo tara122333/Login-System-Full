@@ -4,24 +4,24 @@ const jwt = require("jsonwebtoken");
 
 
 const UserSchema = new mongoose.Schema({
-    fullname:{
+    username:{
         type:String,
         require:true,
     },
-    email:{
+    usermail:{
         type:String,
         require:true,
         unique:true,
     },
-    mobile:{
+    usernumber:{
         type:Number,
         require:true,
     },
-    password:{
+    userpassword:{
         type:String,
         require:true,
     },
-    cpassword:{
+    userconfirmpassword:{
         type:String,
         require:true,
     },
@@ -51,13 +51,13 @@ UserSchema.methods.generateAuthToken = async function(){
 
 UserSchema.pre("save",function(next){
     const user = this;
-    if(!user.isModified("password")) return next();
+    if(!user.isModified("userpassword")) return next();
     bcrypt.genSalt(8,(err,salt)=>{
         if(err) return next(salt);
-        bcrypt.hash(user.password,salt,(err,hash)=>{
+        bcrypt.hash(user.userpassword,salt,(err,hash)=>{
             if(err) return next(err);
-            user.password = hash;
-            user.cpassword = undefined;
+            user.userpassword = hash;
+            user.userconfirmpassword = undefined;
             return next();
         })
     })
