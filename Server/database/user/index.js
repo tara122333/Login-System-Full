@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema({
     usermail:{
         type:String,
         require:true,
-        unique:true,
     },
     usernumber:{
         type:Number,
@@ -49,15 +48,23 @@ UserSchema.methods.generateAuthToken = async function(){
     
 }
 
+UserSchema.statics.userShouldNotExist = async (usermail) => {
+    const user = await UserModel.findOne({ usermail});
+    if (user) throw new Error("User Already exist.");
+    return false;
+  };
+  
+
 UserSchema.pre("save",function(next){
     const user = this;
     if(!user.isModified("userpassword")) return next();
     bcrypt.genSalt(8,(err,salt)=>{
-        if(err) return next(salt);
+        if(err) return next(err);
         bcrypt.hash(user.userpassword,salt,(err,hash)=>{
             if(err) return next(err);
             user.userpassword = hash;
             user.userconfirmpassword = undefined;
+            console.log(user.userpassword);
             return next();
         })
     })

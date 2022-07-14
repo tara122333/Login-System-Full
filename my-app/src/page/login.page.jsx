@@ -40,12 +40,15 @@ const LoginPage = ()=>{
             try {
                 let response = await axios(options);
                 console.log(response);
-                if(response.data.statusText==="success"){
+                if(response.statusText == 'OK'){
                     toast.success("Login Success");
                     localStorage.setItem('token',response.data.token);
                     setTimeout(() => {
                         navigate("/");
                     }, 1500);
+                }
+                else{
+                    toast.error("Login Not  Success");
                 }
                 
             } catch (e) {

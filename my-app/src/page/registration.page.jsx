@@ -52,12 +52,12 @@ const RegistrationPage = ()=>{
                 let response = await axios.post("http://localhost:4000/signup",inputField);
                 // let response = await axios(options);
                 console.log(response);
-                // if(response.status===200){
-                //     toast.success("user added");
-                //     setTimeout(() => {
-                //         navigate("/login");
-                //     }, 1500);
-                // }
+                if(response.status===200){
+                    toast.success("user added");
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 1500);
+                }
                 
             } catch (e) {
                 toast.error("user not added");
